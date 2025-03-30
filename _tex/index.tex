@@ -41,14 +41,28 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -64,15 +78,17 @@
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -155,9 +171,7 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
+
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -172,6 +186,7 @@
   citecolor={Blue},
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
+
 
 \journalname{Earth and Space Science}
 
@@ -199,21 +214,22 @@ eruption is found \ldots{}
 
 
 
+
 \section{Introduction}\label{introduction}
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-timeline-output-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-timeline-output-1.png}}
 
 }
 
@@ -222,18 +238,18 @@ Notebook}}
 \end{figure}%
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 Based on data up to and including 1971, eruptions on La Palma happen
 every 79.8 years on average.
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 Studies of the magma systems feeding the volcano, such as Marrero et al.
@@ -242,20 +258,20 @@ the Cumbre Vieja volcano; one in the mantle (30-40km depth) which
 charges and in turn feeds a shallower crustal reservoir (10-20km depth).
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 Eight eruptions have been recorded since the late 1400s
 (Figure~\ref{fig-timeline}).
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 Data and methods are discussed in Section~\ref{sec-data-methods}.
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 Let \(x\) denote the number of eruptions in a year. Then, \(x\) can be
@@ -270,7 +286,7 @@ Equation~\ref{eq-poisson}, the probability of an eruption in the next
 \(t\) years can be calculated.
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \begin{longtable}[]{@{}ll@{}}
@@ -300,14 +316,14 @@ Table~\ref{tbl-history} summarises the eruptions recorded since the
 colonization of the islands by Europeans in the late 1400s.
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \begin{figure}
 
 \centering{
 
-\includegraphics{images/la-palma-map.png}
+\pandocbounded{\includegraphics[keepaspectratio]{images/la-palma-map.png}}
 
 }
 
@@ -319,14 +335,14 @@ La Palma is one of the west most islands in the Volcanic Archipelago of
 the Canary Islands (Figure~\ref{fig-map}).
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-latex/notebooks-data-screening-fig-spatial-plot-output-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/notebooks-data-screening-fig-spatial-plot-output-1.png}}
 
 }
 
@@ -336,26 +352,26 @@ since 2017.}
 \end{figure}%
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 Figure~\ref{fig-spatial-plot} shows the location of recent Earthquakes
 on La Palma.
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \section{Data \& Methods}\label{sec-data-methods}
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \section{Conclusion}\label{conclusion}
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \section*{References}\label{references}
@@ -364,7 +380,7 @@ Notebook}}
 \vspace{1em}
 
 \textsubscript{Source:
-\href{https://quarto-ext.github.io/manuscript-template-jupyter/index.ipynb.html}{Article
+\href{https://umbertomig.github.io/quarto-learning/index.ipynb.html}{Article
 Notebook}}
 
 \phantomsection\label{refs}
@@ -377,6 +393,7 @@ hazard maps in monogenetic volcanic fields: The example of {La} {Palma}
 \url{https://doi.org/10.1186/s13617-019-0085-5}
 
 \end{CSLReferences}
+
 
 
 
